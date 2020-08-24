@@ -159,10 +159,6 @@ topics:
   3:
   - title: Immutability
     theory_id: 7929
-  - title: Pseudocode basics
-    theory_id: 8228
-  - title: Complex constructions in pseudocode
-    theory_id: 8233
   - title: Stack
     theory_id: 5252
   - title: Queue
