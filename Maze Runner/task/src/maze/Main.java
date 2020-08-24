@@ -23,19 +23,19 @@ public class Main {
 
         while (true) {
             directions = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));
-            maze[i][j] = -1;
+            maze[i][j] = 2;
             printMaze();
             System.out.println("---------------------------------------------");
-            if (i <= 2 || maze[i - 2][j] == -1) {
+            if (i <= 2 || maze[i - 2][j] == 2) {
                 directions.remove(Direction.UP);
             }
-            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == -1)) {
+            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == 2)) {
                 directions.remove(Direction.RIGHT);
             }
-            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == -1)) {
+            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == 2)) {
                 directions.remove(Direction.DOWN);
             }
-            if (j <= 2 || maze[i][j - 2] == -1) {
+            if (j <= 2 || maze[i][j - 2] == 2) {
                 directions.remove(Direction.LEFT);
             }
             if (!directions.isEmpty()) {
@@ -79,35 +79,37 @@ public class Main {
         while (!path.isEmpty()) {
             Direction direction = path.removeFirst();
             if (direction == Direction.RIGHT) {
-                maze[i - 1][j] = 1;
-                maze[i + 1][j] = 1;
-                maze[i - 1][j - 1] = 1;
-                maze[i + 1][j - 1] = 1;
-                maze[][]
+                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
+                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
+                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;
+                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;
+                maze[i][j + 1] = 2;
                 j = j + 2;
             } else if (direction == Direction.LEFT) {
-                maze[i - 1][j] = 1;
-                maze[i + 1][j] = 1;
-                maze[i + 1][j + 1] = 1;
-                maze[i - 1][j + 1] = 1;
+                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
+                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
+                maze[i + 1][j + 1] =  maze[i + 1][j + 1] == 0 ? 0 : 2;
+                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
+                maze[i][j - 1] = 2;
                 j = j - 2;
             } else if (direction == Direction.DOWN) {
-                maze[i][j - 1] = 1;
-                maze[i][j + 1] = 1;
-                maze[i - 1][j - 1] = 1;
-                maze[i - 1][j + 1] = 1;
+                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;
+                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;
+                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;
+                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
+                maze[i + 1][j] = 2;
                 i = i + 2;
             } else if (direction == Direction.UP) {
-                maze[i][j - 1] = 1;
-                maze[i][j + 1] = 1;
-                maze[i + 1][j - 1] = 1;
-                maze[i + 1][j + 1] = 1;
+                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;
+                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;
+                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;
+                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 2;
+                maze[i - 1][j] = 2;
                 i = i - 2;
             }
             printMaze();
             System.out.println("-------------------------");
         }
-
     }
 
     private static void printMaze() {
@@ -117,6 +119,5 @@ public class Main {
             }
             System.out.println();
         }
-        ;
     }
 }
