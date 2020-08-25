@@ -7,7 +7,7 @@ public class Main {
     private static int i = 1;
     private static int j = 1;
     private static final Random random = new Random();
-    private static final Deque<Direction> path = new LinkedList<>();
+    private static final Deque<List<Integer>> path = new LinkedList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -20,10 +20,10 @@ public class Main {
     private static void buildPath(int width, int height) {
         List<Direction> directions;
         Deque<List<Integer>> visitedCells = new LinkedList<>();
-
         while (true) {
             directions = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));
             maze[i][j] = 2;
+            path.add(Arrays.asList(i, j));
             printMaze();
             System.out.println("---------------------------------------------");
             if (i <= 2 || maze[i - 2][j] == 2) {
@@ -54,7 +54,6 @@ public class Main {
 
     private static void pickRandomDirection(List<Direction> directions) {
         Direction direction = directions.get(random.nextInt(directions.size()));
-        path.addLast(direction);
         switch (direction) {
             case UP:
                 i = i - 2;
@@ -71,42 +70,53 @@ public class Main {
             default:
                 break;
         }
+
     }
 
     private static void drawMaze() {
-        i = 1;
-        j = 1;
+        List<Integer> coordinates = path.removeFirst();
+        i = coordinates.get(0);
+        j = coordinates.get(1);
         while (!path.isEmpty()) {
-            Direction direction = path.removeFirst();
+            coordinates = path.removeFirst();
+            Direction direction = null;
+            if (coordinates.get(0) > i && coordinates.get(1) == j) {
+                direction = Direction.DOWN;
+            } else if (coordinates.get(0) < i && coordinates.get(1) == j) {
+                direction = Direction.UP;
+            } else if (coordinates.get(0) == i && coordinates.get(1) > j) {
+                direction = Direction.RIGHT;
+            } else if (coordinates.get(0) == i && coordinates.get(1) < j) {
+                direction = Direction.LEFT;
+            }
+
             if (direction == Direction.RIGHT) {
                 maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
                 maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
                 maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;
                 maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;
                 maze[i][j + 1] = 2;
-                j = j + 2;
             } else if (direction == Direction.LEFT) {
                 maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
                 maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
-                maze[i + 1][j + 1] =  maze[i + 1][j + 1] == 0 ? 0 : 2;
+                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 2;
                 maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
                 maze[i][j - 1] = 2;
-                j = j - 2;
             } else if (direction == Direction.DOWN) {
                 maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;
                 maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;
                 maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;
                 maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
                 maze[i + 1][j] = 2;
-                i = i + 2;
             } else if (direction == Direction.UP) {
                 maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;
                 maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;
                 maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;
                 maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 2;
                 maze[i - 1][j] = 2;
-                i = i - 2;
             }
+            i = coordinates.get(0);
+            j = coordinates.get(1);
             printMaze();
             System.out.println("-------------------------");
         }
