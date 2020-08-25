@@ -1,0 +1,95 @@
+Index: Maze Runner/task/src/maze/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package maze;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n        int[][] maze = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},\r\n                        {0, 0, 0, 1, 0, 0, 0, 0, 0, 1},\r\n                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 0},\r\n                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1},\r\n                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1},\r\n                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1},\r\n                        {1, 0, 0, 1, 1, 0, 1, 0, 0, 1},\r\n                        {1, 0, 0, 0, 1, 0, 1, 0, 0, 1},\r\n                        {1, 0, 0, 0, 0, 0, 1, 0, 0, 1},\r\n                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},\r\n                };\r\n        for (int i = 0; i < 10; i++) {\r\n            for (int j = 0; j < 10; j++) {\r\n                if (maze[i][j] == 1) {\r\n                    System.out.print(\"\\u2588\\u2588\");\r\n                } else {\r\n                    System.out.print(\"  \");\r\n                }\r\n            }\r\n            System.out.println();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Maze Runner/task/src/maze/Main.java	(revision da3e136f07cdae6b6e1f16d0e03e2f0dfa123b34)
++++ Maze Runner/task/src/maze/Main.java	(date 1598021753220)
+@@ -1,27 +1,53 @@
+ package maze;
+ 
++import java.util.Arrays;
++import java.util.Scanner;
++
+ public class Main {
++    private static int[][] maze;
++
+     public static void main(String[] args) {
+-        int[][] maze = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+-                        {0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+-                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 0},
+-                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1},
+-                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1},
+-                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1},
+-                        {1, 0, 0, 1, 1, 0, 1, 0, 0, 1},
+-                        {1, 0, 0, 0, 1, 0, 1, 0, 0, 1},
+-                        {1, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+-                };
+-        for (int i = 0; i < 10; i++) {
+-            for (int j = 0; j < 10; j++) {
+-                if (maze[i][j] == 1) {
+-                    System.out.print("\u2588\u2588");
++        Scanner scanner = new Scanner(System.in);
++        int n = scanner.nextInt();
++        int m = scanner.nextInt();
++        maze = new int[n][m];
++        for (int i = 0; i < n; i++) {
++            maze[i][0] = i;
++        }
++        for (int i = 0; i < m; i++) {
++            maze[0][i] = i;
++        }
++
++        for (int i = 1; i < n; i++) {
++            for (int j = 1; j < m; j++) {
++                if (i == j) {
++                    maze[i][j] = 0;
+                 } else {
+-                    System.out.print("  ");
++                    maze[i][j] = (int) (Math.random() * 6);
+                 }
+             }
+-            System.out.println();
+         }
++        findSpanningTree(1);
++        for (int[] row : maze) {
++            System.out.println(Arrays.toString(row));
++        }
+     }
++
++    private static void findSpanningTree(int rowIndex) {
++            int index = findMinNumberIndex(maze[rowIndex]);
++            maze[rowIndex][index] = -1;
++            findSpanningTree(index);
++    }
++
++    private static int findMinNumberIndex(int[] array) {
++        int index = -1;
++        int min = Integer.MAX_VALUE;
++        for (int i = 0; i < array.length; i++) {
++            if (array[i] < min && array[i] > 0) {
++                index = i;
++                min = array[i];
++            }
++        }
++        return index;
++    }
+ }
+diff --git Maze Runner/Saved
+rename from Maze
+rename to Runner/Saved
+diff --git Maze Runner/task/test/MazeRunnerTest.java
+rename from Maze
+rename to Runner/task/test/MazeRunnerTest.java
+diff --git Maze Runner/Display
+rename from Maze
+rename to Runner/Display
+diff --git Maze Runner/Maze
+rename from Maze
+rename to Runner/Maze
+diff --git Maze Runner/A
+rename from Maze
+rename to Runner/A

@@ -16,26 +16,26 @@ public class Main {
         maze = new int[n][m];
         buildPath(m, n);
     }
-
+    /////////////////////
     private static void buildPath(int width, int height) {
         List<Direction> directions;
         Deque<List<Integer>> visitedCells = new LinkedList<>();
         while (true) {
             directions = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));
-            maze[i][j] = 2;
+            maze[i][j] = 1;
             path.add(Arrays.asList(i, j));
             printMaze();
             System.out.println("---------------------------------------------");
             if (i <= 2 || maze[i - 2][j] == 2) {
                 directions.remove(Direction.UP);
             }
-            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == 2)) {
+            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == 1)) {
                 directions.remove(Direction.RIGHT);
             }
-            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == 2)) {
+            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == 1)) {
                 directions.remove(Direction.DOWN);
             }
-            if (j <= 2 || maze[i][j - 2] == 2) {
+            if (j <= 2 || maze[i][j - 2] == 1) {
                 directions.remove(Direction.LEFT);
             }
             if (!directions.isEmpty()) {
@@ -91,29 +91,29 @@ public class Main {
             }
 
             if (direction == Direction.RIGHT) {
-                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
-                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
-                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;
-                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;
-                maze[i][j + 1] = 2;
+                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;
+                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;
+                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;
+                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;
+                maze[i][j + 1] = 1;
             } else if (direction == Direction.LEFT) {
-                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
-                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
-                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 2;
-                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
-                maze[i][j - 1] = 2;
+                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;
+                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;
+                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;
+                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;
+                maze[i][j - 1] = 1;
             } else if (direction == Direction.DOWN) {
-                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;
-                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;
-                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;
-                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
-                maze[i + 1][j] = 2;
+                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;
+                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;
+                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;
+                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;
+                maze[i + 1][j] = 1;
             } else if (direction == Direction.UP) {
-                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;
-                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;
-                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;
-                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 2;
-                maze[i - 1][j] = 2;
+                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;
+                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;
+                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;
+                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;
+                maze[i - 1][j] = 1;
             }
             i = coordinates.get(0);
             j = coordinates.get(1);
@@ -125,7 +125,12 @@ public class Main {
     private static void printMaze() {
         for (int[] ints : maze) {
             for (int a : ints) {
-                System.out.print(a + " ");
+                /*if (a == 1) {
+                    System.out.print("  ");
+                } else {
+                    System.out.print("\u2588\u2588");
+                }*/
+                System.out.print(a);
             }
             System.out.println();
         }
