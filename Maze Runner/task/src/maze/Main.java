@@ -7,7 +7,7 @@ public class Main {
     private static int i = 1;
     private static int j = 1;
     private static final Random random = new Random();
-    private  static final Deque<List<Integer>> ends = new LinkedList<>();
+    private static final Deque<List<Integer>> ends = new LinkedList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -102,7 +102,7 @@ public class Main {
         maze[1][0] = 1;
     }
 
-    /*private static void buildWayOut(int n, int m) {
+    private static void buildWayOutCorner(int n, int m) {
         for (int k = 3; k < m; k++) {
             if (maze[n - 3][m - k] == 1) {
                 maze[n - 2][m - k] = 1;
@@ -113,9 +113,10 @@ public class Main {
                 break;
             }
         }
-    }*/
+    }
 
     private static void buildWayOut(int height, int width) {
+        boolean isBuilt = false;
         List<Integer> coordinates = null;
         while (!ends.isEmpty()) {
             coordinates = ends.removeLast();
@@ -124,24 +125,33 @@ public class Main {
             if (i - 1 == 0) {
                 maze[i - 1][j] = 1;
                 ends.clear();
+                isBuilt = true;
             } else if (i + 1 == height - 1) {
                 maze[i + 1][j] = 1;
                 ends.clear();
+                isBuilt = true;
             } else if (i + 2 == height - 1) {
                 maze[i + 1][j] = 1;
                 maze[i + 2][j] = 1;
                 ends.clear();
+                isBuilt = true;
             } else if (j - 1 == 0) {
                 maze[i][j - 1] = 1;
                 ends.clear();
+                isBuilt = true;
             } else if (j + 1 == width - 1) {
                 maze[i][j + 1] = 1;
                 ends.clear();
+                isBuilt = true;
             } else if (j + 2 == width - 1) {
                 maze[i][j + 1] = 1;
                 maze[i][j + 2] = 1;
                 ends.clear();
+                isBuilt = true;
             }
+        }
+        if (!isBuilt) {
+            buildWayOutCorner(height, width);
         }
     }
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 enum Elem {
     WALL, EMPTY, PATH, DUMMY;
 
@@ -363,9 +364,11 @@ class Maze {
 }
 
 class Clue {
-    int size;
-    Clue(int s) {
-        size = s;
+    int height;
+    int width;
+    Clue(int h, int w) {
+        height = h;
+        width = w;
     }
 }
 
@@ -375,23 +378,79 @@ public class MazeRunnerTest extends StageTest<Clue> {
         super(Main.class);
     }
 
+    List<Maze> previousMazes = new ArrayList<>();
+
     @Override
     public List<TestCase<Clue>> generate() {
         return List.of(
             new TestCase<Clue>()
-                .setInput("0"),
+                .setInput("7 9")
+                .setAttach(new Clue(7, 9)),
 
             new TestCase<Clue>()
-                .setInput("1\n17\n0")
-                .setAttach(new Clue(17)),
+                .setInput("15 35")
+                .setAttach(new Clue(15, 35)),
 
             new TestCase<Clue>()
-                .setInput("1\n15\n3\ntest_maze.txt\n0")
-                .setAttach(new Clue(15)),
+                .setInput("15 35")
+                .setAttach(new Clue(15, 35)),
 
             new TestCase<Clue>()
-                .setInput("2\ntest_maze.txt\n4\n0")
-                .setAttach(new Clue(15))
+                .setInput("15 35")
+                .setAttach(new Clue(15, 35)),
+
+            new TestCase<Clue>()
+                .setInput("15 35")
+                .setAttach(new Clue(15, 35)),
+
+            new TestCase<Clue>()
+                .setInput("15 35")
+                .setAttach(new Clue(15, 35)),
+
+            new TestCase<Clue>()
+                .setInput("15 35")
+                .setAttach(new Clue(15, 35)),
+
+            new TestCase<Clue>()
+                .setInput("15 35")
+                .setAttach(new Clue(15, 35)),
+
+            new TestCase<Clue>()
+                .setInput("15 35")
+                .setAttach(new Clue(15, 35)),
+
+            new TestCase<Clue>()
+                .setInput("34 23")
+                .setAttach(new Clue(34, 23)),
+
+            new TestCase<Clue>()
+                .setInput("34 23")
+                .setAttach(new Clue(34, 23)),
+
+            new TestCase<Clue>()
+                .setInput("34 23")
+                .setAttach(new Clue(34, 23)),
+
+            new TestCase<Clue>()
+                .setInput("34 23")
+                .setAttach(new Clue(34, 23)),
+
+            new TestCase<Clue>()
+                .setInput("34 23")
+                .setAttach(new Clue(34, 23)),
+
+            new TestCase<Clue>()
+                .setInput("34 23")
+                .setAttach(new Clue(34, 23)),
+
+            new TestCase<Clue>()
+                .setInput("34 23")
+                .setAttach(new Clue(34, 23)),
+
+            new TestCase<Clue>()
+                .setInput("34 23")
+                .setAttach(new Clue(34, 23))
+
         );
     }
 
@@ -407,14 +466,7 @@ public class MazeRunnerTest extends StageTest<Clue> {
             );
         }
 
-        if (clue == null && mazes.size() == 0) {
-            return CheckResult.correct();
-        } else if (clue == null) {
-            return CheckResult.wrong(
-                "In this test no maze should be shown, but one was shown. " +
-                    "Try to use \\u2588 character only to print the maze."
-            );
-        } else if (mazes.size() == 0) {
+        if (mazes.size() == 0) {
             return CheckResult.wrong(
                 "No mazes found in the output. Check if you are using " +
                     "\\u2588 character to print the maze."
@@ -429,6 +481,16 @@ public class MazeRunnerTest extends StageTest<Clue> {
         }
 
         Maze maze = mazes.get(0);
+
+        for (Maze prev : previousMazes) {
+            if (prev.equals(maze)) {
+                return CheckResult.wrong(
+                    "This is the same maze that was in the previous tests. " +
+                    "You should create an algorithm that generates different mazes."
+                );
+            }
+        }
+        previousMazes.add(maze);
 
         int entrances = maze.countEntrances();
         if (entrances != 2) {
@@ -446,16 +508,16 @@ public class MazeRunnerTest extends StageTest<Clue> {
             );
         }
 
-        if (maze.getHeight() != clue.size) {
+        if (maze.getHeight() != clue.height) {
             return new CheckResult(false,
                 "Number of rows in the maze is incorrect. " +
-                    "It's " + maze.getHeight() + ", but should be " + clue.size);
+                    "It's " + maze.getHeight() + ", but should be " + clue.height);
         }
 
-        if (maze.getWidth() != clue.size) {
+        if (maze.getWidth() != clue.width) {
             return new CheckResult(false,
                 "Number of columns in the maze is incorrect. " +
-                    "It's " + maze.getWidth() + ", but should be " + clue.size);
+                    "It's " + maze.getWidth() + ", but should be " + clue.width);
         }
 
         return CheckResult.correct();
