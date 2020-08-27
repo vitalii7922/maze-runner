@@ -1,0 +1,19 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_26_08_2020_18_18_[Default_Changelist]" date="1598455101275" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_18_18_[Default_Changelist]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 26.08.2020 18:18 [Default Changelist]" />
+  <binary>
+    <option name="BEFORE_PATH" value=".idea/frameworkLessonHistory/storage.storageRecordIndex" />
+    <option name="AFTER_PATH" value=".idea/frameworkLessonHistory/storage.storageRecordIndex" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_18_18_[Default_Changelist]/storage.storageRecordIndex" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Maze Runner/task/out/production/classes/maze/Main.class" />
+    <option name="AFTER_PATH" value="Maze Runner/task/out/production/classes/maze/Main.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_18_18_[Default_Changelist]/Main.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".idea/frameworkLessonHistory/storage.storageData" />
+    <option name="AFTER_PATH" value=".idea/frameworkLessonHistory/storage.storageData" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_18_18_[Default_Changelist]/storage.storageData" />
+  </binary>
+</changelist>

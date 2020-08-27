@@ -1,0 +1,456 @@
+Index: Maze Runner/task/src/maze/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package maze;\r\n\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    private static int[][] maze;\r\n    private static int i = 1;\r\n    private static int j = 1;\r\n    private static final Random random = new Random();\r\n    private static final Deque<List<Integer>> pathQueue = new LinkedList<>();\r\n    private static final List<List<Integer>> pathList = new LinkedList<>();\r\n\r\n    public static void main(String[] args) {\r\n        Scanner scanner = new Scanner(System.in);\r\n        int n = scanner.nextInt();\r\n        int m = scanner.nextInt();\r\n        maze = new int[n][m];\r\n        buildPath(m, n);\r\n        buildWayIn();\r\n        buildWayOut(n, m);\r\n        printMaze();\r\n    }\r\n\r\n    private static void buildPath(int width, int height) {\r\n        List<Direction> directions;\r\n        Deque<List<Integer>> visitedCells = new LinkedList<>();\r\n        while (true) {\r\n            directions = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));\r\n            maze[i][j] = 1;\r\n            pathQueue.add(Arrays.asList(i, j));\r\n            pathList.add(Arrays.asList(i, j));\r\n            if (i <= 2 || maze[i - 2][j] == 1) {\r\n                directions.remove(Direction.UP);\r\n            }\r\n            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == 1)) {\r\n                directions.remove(Direction.RIGHT);\r\n            }\r\n            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == 1)) {\r\n                directions.remove(Direction.DOWN);\r\n            }\r\n            if (j <= 2 || maze[i][j - 2] == 1) {\r\n                directions.remove(Direction.LEFT);\r\n            }\r\n            if (!directions.isEmpty()) {\r\n                pickRandomDirection(directions);\r\n                visitedCells.addLast(Arrays.asList(i, j));\r\n            } else if (!visitedCells.isEmpty()) {\r\n                List<Integer> coordinates = visitedCells.removeLast();\r\n                i = coordinates.get(0);\r\n                j = coordinates.get(1);\r\n            } else {\r\n                break;\r\n            }\r\n        }\r\n    }\r\n\r\n    private static void pickRandomDirection(List<Direction> directions) {\r\n        Direction direction = directions.get(random.nextInt(directions.size()));\r\n        switch (direction) {\r\n            case UP:\r\n                i = i - 2;\r\n                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;\r\n                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;\r\n                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;\r\n                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;\r\n                maze[i - 1][j] = 1;\r\n                break;\r\n            case DOWN:\r\n                i = i + 2;\r\n                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;\r\n                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;\r\n                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;\r\n                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;\r\n                maze[i + 1][j] = 1;\r\n                break;\r\n            case LEFT:\r\n                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;\r\n                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;\r\n                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;\r\n                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;\r\n                maze[i][j - 1] = 1;\r\n                j = j - 2;\r\n                break;\r\n            case RIGHT:\r\n                j = j + 2;\r\n                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;\r\n                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;\r\n                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;\r\n                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;\r\n                maze[i][j + 1] = 1;\r\n                break;\r\n            default:\r\n                break;\r\n        }\r\n\r\n    }\r\n\r\n    private static void buildWayIn() {\r\n        maze[1][0] = 1;\r\n    }\r\n\r\n    private static void buildWayOut(int n, int m) {\r\n        for (int k = 3; k < m; k++) {\r\n            if (maze[n - 3][m - k] == 1) {\r\n                maze[n - 2][m - k] = 1;\r\n                maze[n - 1][m - k] = 1;\r\n                break;\r\n            } else if (maze[n - 2][m - k] == 1) {\r\n                maze[n - 1][m - k] = 1;\r\n                break;\r\n            }\r\n        }\r\n    }\r\n\r\n    private static void printMaze() {\r\n        for (int[] ints : maze) {\r\n            for (int a : ints) {\r\n                if (a == 1) {\r\n                    System.out.print(\"  \");\r\n                } else {\r\n                    System.out.print(\"\\u2588\\u2588\");\r\n                }\r\n            }\r\n            System.out.println();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Maze Runner/task/src/maze/Main.java	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ Maze Runner/task/src/maze/Main.java	(date 1598454708086)
+@@ -58,20 +58,21 @@
+         Direction direction = directions.get(random.nextInt(directions.size()));
+         switch (direction) {
+             case UP:
+-                i = i - 2;
+                 maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;
+                 maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;
+                 maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;
+                 maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;
+                 maze[i - 1][j] = 1;
++                i = i - 2;
+                 break;
+             case DOWN:
+-                i = i + 2;
++
+                 maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;
+                 maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;
+                 maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;
+                 maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;
+                 maze[i + 1][j] = 1;
++                i = i + 2;
+                 break;
+             case LEFT:
+                 maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;
+@@ -82,12 +83,12 @@
+                 j = j - 2;
+                 break;
+             case RIGHT:
+-                j = j + 2;
+                 maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;
+                 maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;
+                 maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;
+                 maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;
+                 maze[i][j + 1] = 1;
++                j = j + 2;
+                 break;
+             default:
+                 break;
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59__Default_Changelist_.xml	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59__Default_Changelist_.xml	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
+@@ -1,49 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]" date="1598453977176" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 26.08.2020 17:59 [Default Changelist]" />
+-  <binary>
+-    <option name="BEFORE_PATH" value=".idea/frameworkLessonHistory/storage.storageRecordIndex" />
+-    <option name="AFTER_PATH" value=".idea/frameworkLessonHistory/storage.storageRecordIndex" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/storage.storageRecordIndex" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/buildOutputCleanup/outputFiles.bin" />
+-    <option name="AFTER_PATH" value=".gradle/buildOutputCleanup/outputFiles.bin" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/outputFiles.bin" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+-    <option name="AFTER_PATH" value=".gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/buildOutputCleanup.lock" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/5.3.1/executionHistory/executionHistory.lock" />
+-    <option name="AFTER_PATH" value=".gradle/5.3.1/executionHistory/executionHistory.lock" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/executionHistory.lock" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/5.3.1/executionHistory/executionHistory.bin" />
+-    <option name="AFTER_PATH" value=".gradle/5.3.1/executionHistory/executionHistory.bin" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/executionHistory.bin" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/5.3.1/fileHashes/fileHashes.bin" />
+-    <option name="AFTER_PATH" value=".gradle/5.3.1/fileHashes/fileHashes.bin" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/fileHashes.bin" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value="Maze Runner/task/out/production/classes/maze/Main.class" />
+-    <option name="AFTER_PATH" value="Maze Runner/task/out/production/classes/maze/Main.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/Main.class" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/5.3.1/fileHashes/fileHashes.lock" />
+-    <option name="AFTER_PATH" value=".gradle/5.3.1/fileHashes/fileHashes.lock" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/fileHashes.lock" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".idea/frameworkLessonHistory/storage.storageData" />
+-    <option name="AFTER_PATH" value=".idea/frameworkLessonHistory/storage.storageData" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/storage.storageData" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54_[Default_Changelist]/shelved.patch	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54_[Default_Changelist]/shelved.patch	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
+@@ -1,26 +0,0 @@
+-Index: Maze Runner/task/src/maze/Main.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package maze;\r\n\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    private static int[][] maze;\r\n    private static int i = 1;\r\n    private static int j = 1;\r\n    private static final Random random = new Random();\r\n    private static final Deque<Direction> path = new LinkedList<>();\r\n\r\n    public static void main(String[] args) {\r\n        Scanner scanner = new Scanner(System.in);\r\n        int n = scanner.nextInt();\r\n        int m = scanner.nextInt();\r\n        maze = new int[n][m];\r\n        buildPath(m, n);\r\n    }\r\n\r\n    private static void buildPath(int width, int height) {\r\n        List<Direction> directions;\r\n        Deque<List<Integer>> visitedCells = new LinkedList<>();\r\n\r\n        while (true) {\r\n            directions = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));\r\n            maze[i][j] = 2;\r\n            printMaze();\r\n            System.out.println(\"---------------------------------------------\");\r\n            if (i <= 2 || maze[i - 2][j] == 2) {\r\n                directions.remove(Direction.UP);\r\n            }\r\n            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == 2)) {\r\n                directions.remove(Direction.RIGHT);\r\n            }\r\n            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == 2)) {\r\n                directions.remove(Direction.DOWN);\r\n            }\r\n            if (j <= 2 || maze[i][j - 2] == 2) {\r\n                directions.remove(Direction.LEFT);\r\n            }\r\n            if (!directions.isEmpty()) {\r\n                pickRandomDirection(directions);\r\n                visitedCells.addLast(Arrays.asList(i, j));\r\n            } else if (!visitedCells.isEmpty()) {\r\n                List<Integer> coordinates = visitedCells.removeLast();\r\n                i = coordinates.get(0);\r\n                j = coordinates.get(1);\r\n            } else {\r\n                break;\r\n            }\r\n        }\r\n        drawMaze();\r\n    }\r\n\r\n    private static void pickRandomDirection(List<Direction> directions) {\r\n        Direction direction = directions.get(random.nextInt(directions.size()));\r\n        path.addLast(direction);\r\n        switch (direction) {\r\n            case UP:\r\n                i = i - 2;\r\n                break;\r\n            case DOWN:\r\n                i = i + 2;\r\n                break;\r\n            case LEFT:\r\n                j = j - 2;\r\n                break;\r\n            case RIGHT:\r\n                j = j + 2;\r\n                break;\r\n            default:\r\n                break;\r\n        }\r\n    }\r\n\r\n    private static void drawMaze() {\r\n        i = 1;\r\n        j = 1;\r\n        while (!path.isEmpty()) {\r\n            Direction direction = path.removeFirst();\r\n            if (direction == Direction.RIGHT) {\r\n                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;\r\n                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;\r\n                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;\r\n                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;\r\n                maze[i][j + 1] = 2;\r\n                j = j + 2;\r\n            } else if (direction == Direction.LEFT) {\r\n                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;\r\n                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;\r\n                maze[i + 1][j + 1] =  maze[i + 1][j + 1] == 0 ? 0 : 2;\r\n                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;\r\n                maze[i][j - 1] = 2;\r\n                j = j - 2;\r\n            } else if (direction == Direction.DOWN) {\r\n                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;\r\n                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;\r\n                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;\r\n                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;\r\n                maze[i + 1][j] = 2;\r\n                i = i + 2;\r\n            } else if (direction == Direction.UP) {\r\n                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;\r\n                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;\r\n                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;\r\n                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 2;\r\n                maze[i - 1][j] = 2;\r\n                i = i - 2;\r\n            }\r\n            printMaze();\r\n            System.out.println(\"-------------------------\");\r\n        }\r\n    }\r\n\r\n    private static void printMaze() {\r\n        for (int[] ints : maze) {\r\n            for (int a : ints) {\r\n                System.out.print(a + \" \");\r\n            }\r\n            System.out.println();\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- Maze Runner/task/src/maze/Main.java	(revision 88313af5d817efd87ce27e26c792d02f6d004935)
+-+++ Maze Runner/task/src/maze/Main.java	(date 1598294104734)
+-@@ -20,7 +20,6 @@
+-     private static void buildPath(int width, int height) {
+-         List<Direction> directions;
+-         Deque<List<Integer>> visitedCells = new LinkedList<>();
+--
+-         while (true) {
+-             directions = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));
+-             maze[i][j] = 2;
+-@@ -88,7 +87,7 @@
+-             } else if (direction == Direction.LEFT) {
+-                 maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
+-                 maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
+--                maze[i + 1][j + 1] =  maze[i + 1][j + 1] == 0 ? 0 : 2;
+-+                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 2;
+-                 maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
+-                 maze[i][j - 1] = 2;
+-                 j = j - 2;
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]/shelved.patch	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]/shelved.patch	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
+@@ -1,194 +0,0 @@
+-Index: Maze Runner/task/src/maze/Main.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package maze;\r\n\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    private static int[][] maze;\r\n    private static int i = 1;\r\n    private static int j = 1;\r\n    private static final Random random = new Random();\r\n    private static final Deque<List<Integer>> pathQueue = new LinkedList<>();\r\n    private static final List<List<Integer>> pathList = new LinkedList<>();\r\n\r\n    public static void main(String[] args) {\r\n        Scanner scanner = new Scanner(System.in);\r\n        int n = scanner.nextInt();\r\n        int m = scanner.nextInt();\r\n        maze = new int[n][m];\r\n        buildPath(m, n);\r\n        buildWayIn();\r\n        buildWayOut(n, m);\r\n        printMaze();\r\n    }\r\n\r\n    private static void buildPath(int width, int height) {\r\n        List<Direction> directions;\r\n        Deque<List<Integer>> visitedCells = new LinkedList<>();\r\n        while (true) {\r\n            directions = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));\r\n            maze[i][j] = 1;\r\n            pathQueue.add(Arrays.asList(i, j));\r\n            pathList.add(Arrays.asList(i, j));\r\n            if (i <= 2 || maze[i - 2][j] == 1) {\r\n                directions.remove(Direction.UP);\r\n            }\r\n            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == 1)) {\r\n                directions.remove(Direction.RIGHT);\r\n            }\r\n            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == 1)) {\r\n                directions.remove(Direction.DOWN);\r\n            }\r\n            if (j <= 2 || maze[i][j - 2] == 1) {\r\n                directions.remove(Direction.LEFT);\r\n            }\r\n            if (!directions.isEmpty()) {\r\n                pickRandomDirection(directions);\r\n                visitedCells.addLast(Arrays.asList(i, j));\r\n            } else if (!visitedCells.isEmpty()) {\r\n                List<Integer> coordinates = visitedCells.removeLast();\r\n                i = coordinates.get(0);\r\n                j = coordinates.get(1);\r\n            } else {\r\n                break;\r\n            }\r\n        }\r\n        drawMaze();\r\n    }\r\n\r\n    private static void pickRandomDirection(List<Direction> directions) {\r\n        Direction direction = directions.get(random.nextInt(directions.size()));\r\n        switch (direction) {\r\n            case UP:\r\n                i = i - 2;\r\n                break;\r\n            case DOWN:\r\n                i = i + 2;\r\n                break;\r\n            case LEFT:\r\n                j = j - 2;\r\n                break;\r\n            case RIGHT:\r\n                j = j + 2;\r\n                break;\r\n            default:\r\n                break;\r\n        }\r\n\r\n    }\r\n\r\n    private static void drawMaze() {\r\n        List<Integer> coordinates = pathQueue.removeFirst();\r\n        i = coordinates.get(0);\r\n        j = coordinates.get(1);\r\n        while (!pathQueue.isEmpty()) {\r\n            coordinates = pathQueue.removeFirst();\r\n            Direction direction = null;\r\n            if (coordinates.get(0) > i && coordinates.get(1) == j) {\r\n                direction = Direction.DOWN;\r\n            } else if (coordinates.get(0) < i && coordinates.get(1) == j) {\r\n                direction = Direction.UP;\r\n            } else if (coordinates.get(0) == i && coordinates.get(1) > j) {\r\n                direction = Direction.RIGHT;\r\n            } else if (coordinates.get(0) == i && coordinates.get(1) < j) {\r\n                direction = Direction.LEFT;\r\n            }\r\n            if (direction == Direction.RIGHT) {\r\n                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;\r\n                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;\r\n                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;\r\n                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;\r\n                maze[i][j + 1] = 1;\r\n            } else if (direction == Direction.LEFT) {\r\n                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;\r\n                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;\r\n                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;\r\n                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;\r\n                maze[i][j - 1] = 1;\r\n            } else if (direction == Direction.DOWN) {\r\n                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;\r\n                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;\r\n                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;\r\n                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;\r\n                maze[i + 1][j] = 1;\r\n            } else if (direction == Direction.UP) {\r\n                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;\r\n                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;\r\n                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;\r\n                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;\r\n                maze[i - 1][j] = 1;\r\n            }\r\n            i = coordinates.get(0);\r\n            j = coordinates.get(1);\r\n        }\r\n\r\n    }\r\n\r\n    private static void buildWayIn() {\r\n        maze[1][0] = 1;\r\n    }\r\n\r\n    private static void buildWayOut(int n, int m) {\r\n        for (int k = 3; k < m; k++) {\r\n            if (maze[n - 3][m - k] == 1) {\r\n                maze[n - 2][m - k] = 1;\r\n                maze[n - 1][m - k] = 1;\r\n                break;\r\n            } else if (maze[n - 2][m - k] == 1) {\r\n                maze[n - 1][m - k] = 1;\r\n                break;\r\n            }\r\n        }\r\n    }\r\n\r\n    private static void printMaze() {\r\n        for (int[] ints : maze) {\r\n            for (int a : ints) {\r\n                if (a == 1) {\r\n                    System.out.print(\"  \");\r\n                } else {\r\n                    System.out.print(\"\\u2588\\u2588\");\r\n                }\r\n            }\r\n            System.out.println();\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- Maze Runner/task/src/maze/Main.java	(revision 5920bccd6c9b43db4e6e8ac2f957cdb15124e0ba)
+-+++ Maze Runner/task/src/maze/Main.java	(date 1598453718858)
+-@@ -7,8 +7,7 @@
+-     private static int i = 1;
+-     private static int j = 1;
+-     private static final Random random = new Random();
+--    private static final Deque<List<Integer>> pathQueue = new LinkedList<>();
+--    private static final List<List<Integer>> pathList = new LinkedList<>();
+-+    private static final Deque<Direction> path = new LinkedList<>();
+- 
+-     public static void main(String[] args) {
+-         Scanner scanner = new Scanner(System.in);
+-@@ -16,29 +15,27 @@
+-         int m = scanner.nextInt();
+-         maze = new int[n][m];
+-         buildPath(m, n);
+--        buildWayIn();
+--        buildWayOut(n, m);
+--        printMaze();
+-     }
+- 
+-     private static void buildPath(int width, int height) {
+-         List<Direction> directions;
+-         Deque<List<Integer>> visitedCells = new LinkedList<>();
+-+
+-         while (true) {
+-             directions = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));
+--            maze[i][j] = 1;
+--            pathQueue.add(Arrays.asList(i, j));
+--            pathList.add(Arrays.asList(i, j));
+--            if (i <= 2 || maze[i - 2][j] == 1) {
+-+            maze[i][j] = 2;
+-+            printMaze();
+-+            System.out.println("---------------------------------------------");
+-+            if (i <= 2 || maze[i - 2][j] == 2) {
+-                 directions.remove(Direction.UP);
+-             }
+--            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == 1)) {
+-+            if (j >= width - 3 || (j < width - 3 && maze[i][j + 2] == 2)) {
+-                 directions.remove(Direction.RIGHT);
+-             }
+--            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == 1)) {
+-+            if (i >= height - 3 || (i < height - 3 && maze[i + 2][j] == 2)) {
+-                 directions.remove(Direction.DOWN);
+-             }
+--            if (j <= 2 || maze[i][j - 2] == 1) {
+-+            if (j <= 2 || maze[i][j - 2] == 2) {
+-                 directions.remove(Direction.LEFT);
+-             }
+-             if (!directions.isEmpty()) {
+-@@ -57,6 +54,7 @@
+- 
+-     private static void pickRandomDirection(List<Direction> directions) {
+-         Direction direction = directions.get(random.nextInt(directions.size()));
+-+        path.addLast(direction);
+-         switch (direction) {
+-             case UP:
+-                 i = i - 2;
+-@@ -73,81 +71,51 @@
+-             default:
+-                 break;
+-         }
+--
+-     }
+- 
+-     private static void drawMaze() {
+--        List<Integer> coordinates = pathQueue.removeFirst();
+--        i = coordinates.get(0);
+--        j = coordinates.get(1);
+--        while (!pathQueue.isEmpty()) {
+--            coordinates = pathQueue.removeFirst();
+--            Direction direction = null;
+--            if (coordinates.get(0) > i && coordinates.get(1) == j) {
+--                direction = Direction.DOWN;
+--            } else if (coordinates.get(0) < i && coordinates.get(1) == j) {
+--                direction = Direction.UP;
+--            } else if (coordinates.get(0) == i && coordinates.get(1) > j) {
+--                direction = Direction.RIGHT;
+--            } else if (coordinates.get(0) == i && coordinates.get(1) < j) {
+--                direction = Direction.LEFT;
+--            }
+-+        i = 1;
+-+        j = 1;
+-+        while (!path.isEmpty()) {
+-+            Direction direction = path.removeFirst();
+-             if (direction == Direction.RIGHT) {
+--                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;
+--                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;
+--                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;
+--                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;
+--                maze[i][j + 1] = 1;
+-+                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
+-+                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
+-+                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;
+-+                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;
+-+                maze[i][j + 1] = 2;
+-+                j = j + 2;
+-             } else if (direction == Direction.LEFT) {
+--                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 1;
+--                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 1;
+--                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;
+--                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;
+--                maze[i][j - 1] = 1;
+-+                maze[i - 1][j] = maze[i - 1][j] == 0 ? 0 : 2;
+-+                maze[i + 1][j] = maze[i + 1][j] == 0 ? 0 : 2;
+-+                maze[i + 1][j + 1] =  maze[i + 1][j + 1] == 0 ? 0 : 2;
+-+                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
+-+                maze[i][j - 1] = 2;
+-+                j = j - 2;
+-             } else if (direction == Direction.DOWN) {
+--                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;
+--                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;
+--                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 1;
+--                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 1;
+--                maze[i + 1][j] = 1;
+-+                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;
+-+                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;
+-+                maze[i - 1][j - 1] = maze[i - 1][j - 1] == 0 ? 0 : 2;
+-+                maze[i - 1][j + 1] = maze[i - 1][j + 1] == 0 ? 0 : 2;
+-+                maze[i + 1][j] = 2;
+-+                i = i + 2;
+-             } else if (direction == Direction.UP) {
+--                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 1;
+--                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 1;
+--                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 1;
+--                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 1;
+--                maze[i - 1][j] = 1;
+-+                maze[i][j - 1] = maze[i][j - 1] == 0 ? 0 : 2;
+-+                maze[i][j + 1] = maze[i][j + 1] == 0 ? 0 : 2;
+-+                maze[i + 1][j - 1] = maze[i + 1][j - 1] == 0 ? 0 : 2;
+-+                maze[i + 1][j + 1] = maze[i + 1][j + 1] == 0 ? 0 : 2;
+-+                maze[i - 1][j] = 2;
+-+                i = i - 2;
+-             }
+--            i = coordinates.get(0);
+--            j = coordinates.get(1);
+-+            printMaze();
+-+            System.out.println("-------------------------");
+-         }
+--
+-     }
+--
+--    private static void buildWayIn() {
+--        maze[1][0] = 1;
+--    }
+--
+--    private static void buildWayOut(int n, int m) {
+--        for (int k = 3; k < m; k++) {
+--            if (maze[n - 3][m - k] == 1) {
+--                maze[n - 2][m - k] = 1;
+--                maze[n - 1][m - k] = 1;
+--                break;
+--            } else if (maze[n - 2][m - k] == 1) {
+--                maze[n - 1][m - k] = 1;
+--                break;
+--            }
+--        }
+--    }
+- 
+-     private static void printMaze() {
+-         for (int[] ints : maze) {
+-             for (int a : ints) {
+--                if (a == 1) {
+--                    System.out.print("  ");
+--                } else {
+--                    System.out.print("\u2588\u2588");
+--                }
+-+                System.out.print(a + " ");
+-             }
+-             System.out.println();
+-         }
+-Index: .idea/misc.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"11 (2)\" project-jdk-type=\"JavaSDK\" />\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/misc.xml	(revision 5920bccd6c9b43db4e6e8ac2f957cdb15124e0ba)
+-+++ .idea/misc.xml	(date 1598453825563)
+-@@ -1,4 +1,4 @@
+- <?xml version="1.0" encoding="UTF-8"?>
+- <project version="4">
+--  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11 (2)" project-jdk-type="JavaSDK" />
+-+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="12" project-jdk-type="JavaSDK" />
+- </project>
+-\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/shelved.patch	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_59_[Default_Changelist]/shelved.patch	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
+@@ -1,1 +0,0 @@
+-diff --git .idea/shelf/Uncommitted_changes_before_Checkout_at_24_08_2020_11_10__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Checkout_at_24_08_2020_11_10__Default_Changelist_.xml
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/shelved.patch	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/shelved.patch	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
+@@ -1,23 +0,0 @@
+-Index: Maze Runner/Maze generator/task-info.yaml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>type: edu\r\ncustom_name: stage2\r\nfiles:\r\n- name: src/maze/Main.java\r\n  visible: true\r\n  text: |\r\n    package maze;\r\n\r\n    public class Main {\r\n        public static void main(String[] args) {\r\n            System.out.println(\"Hello World!\");\r\n        }\r\n    }\r\n  learner_created: false\r\n- name: test/MazeRunnerTest.java\r\n  visible: false\r\n  text: |\r\n    import maze.Main;\r\n    import org.hyperskill.hstest.stage.StageTest;\r\n    import org.hyperskill.hstest.testcase.CheckResult;\r\n    import org.hyperskill.hstest.testcase.TestCase;\r\n\r\n    import java.util.ArrayList;\r\n    import java.util.List;\r\n    import java.util.stream.Collectors;\r\n\r\n\r\n    enum Elem {\r\n        WALL, EMPTY, PATH, DUMMY;\r\n\r\n        static Elem get(char c) {\r\n            if (c == '\\u2588') {\r\n                return WALL;\r\n            } else if (c == ' ') {\r\n                return EMPTY;\r\n            } else if (c == '/') {\r\n                return PATH;\r\n            } else {\r\n                return null;\r\n            }\r\n        }\r\n    }\r\n\r\n    class Maze {\r\n\r\n        // maze[height][width]\r\n        // maze[row][col]\r\n        Elem[][] maze;\r\n\r\n        Maze(Maze other) {\r\n            maze = new Elem[other.getHeight()][other.getWidth()];\r\n            for (int h = 0; h < other.getHeight(); h++) {\r\n                for (int w = 0; w < other.getWidth(); w++) {\r\n                    maze[h][w] = other.maze[h][w];\r\n                }\r\n            }\r\n        }\r\n\r\n        Maze(List<String> lines) throws Exception {\r\n\r\n            int lineCount = 1;\r\n            for (String line : lines) {\r\n                if (line.length() % 2 != 0) {\r\n                    throw new Exception(\"Line \" + lineCount + \" of the maze \" +\r\n                        \"contains odd number of characters. Should be always even.\");\r\n                }\r\n\r\n                for (char c : line.toCharArray()) {\r\n                    if (Elem.get(c) == null) {\r\n                        String hex = Integer.toHexString((int)c);\r\n                        throw new Exception(\r\n                            \"Found strange symbol in the \" + lineCount +\r\n                                \" line of the maze: \\\\u\" + hex);\r\n                    }\r\n                }\r\n\r\n                int lineWidth = line.length() / 2;\r\n\r\n                for (int currWidth = 0; currWidth < lineWidth; currWidth++) {\r\n                    int currIndex = currWidth * 2;\r\n                    int nextIndex = currIndex + 1;\r\n\r\n                    char currChar = line.charAt(currIndex);\r\n                    char nextChar = line.charAt(nextIndex);\r\n\r\n                    if (currChar != nextChar) {\r\n                        throw new Exception(\"There are symbols in \" +\r\n                            \"this line that don't appear twice in a row \" +\r\n                            \"(at indexes \" + currIndex + \" and \" + nextIndex + \").\\n\" +\r\n                            \"Line: \\\"\" + line + \"\\\"\");\r\n                    }\r\n                }\r\n\r\n                lineCount++;\r\n            }\r\n\r\n            int mazeWidth = lines.get(0).length() / 2;\r\n            int mazeHeight = lines.size();\r\n\r\n            lineCount = 1;\r\n            for (String line : lines) {\r\n                if (line.length() / 2 != mazeWidth) {\r\n                    throw new Exception(\"The first line of the maze contains \" +\r\n                        lines.get(0).length() + \" characters, but the line #\" +\r\n                        lineCount + \" contains \" + line.length() + \" characters.\");\r\n                }\r\n                lineCount++;\r\n            }\r\n\r\n            maze = new Elem[mazeHeight][mazeWidth];\r\n\r\n            for (int currHeight = 0; currHeight < mazeHeight; currHeight++) {\r\n                String line = lines.get(currHeight);\r\n                for (int currWidth = 0; currWidth < mazeWidth; currWidth++) {\r\n                    char c = line.charAt(currWidth * 2);\r\n                    maze[currHeight][currWidth] = Elem.get(c);\r\n                }\r\n            }\r\n\r\n            if (maze[0][0] != Elem.WALL ||\r\n                maze[0][mazeWidth - 1] != Elem.WALL ||\r\n                maze[mazeHeight - 1][0] != Elem.WALL ||\r\n                maze[mazeHeight - 1][mazeWidth - 1] != Elem.WALL) {\r\n                throw new Exception(\"All four corners of the maze must be walls.\");\r\n            }\r\n\r\n            for (int h = 0; h <= mazeHeight - 3; h++) {\r\n                for (int w = 0; w <= mazeWidth - 3; w++) {\r\n                    if (getElem(h, w) == Elem.WALL &&\r\n                        getElem(h, w + 1) == Elem.WALL &&\r\n                        getElem(h, w + 2) == Elem.WALL &&\r\n\r\n                        getElem(h + 1, w) == Elem.WALL &&\r\n                        getElem(h + 1, w + 1) == Elem.WALL &&\r\n                        getElem(h + 1, w + 2) == Elem.WALL &&\r\n\r\n                        getElem(h + 2, w) == Elem.WALL &&\r\n                        getElem(h + 2, w + 1) == Elem.WALL &&\r\n                        getElem(h + 2, w + 2) == Elem.WALL) {\r\n\r\n                        throw new Exception(\"There are 3x3 block in the maze \" +\r\n                            \"consisting only of walls. Such blocks are not allowed.\");\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n        Elem[] getRow(int rowNum) {\r\n            Elem[] newRow = new Elem[getWidth()];\r\n            for (int i = 0; i < getWidth(); i++) {\r\n                newRow[i] = maze[rowNum][i];\r\n            }\r\n            return newRow;\r\n        }\r\n\r\n        Elem[] getCol(int colNum) {\r\n            Elem[] newCol = new Elem[getHeight()];\r\n            for (int i = 0; i < getHeight(); i++) {\r\n                newCol[i] = maze[i][colNum];\r\n            }\r\n            return newCol;\r\n        }\r\n\r\n        Elem getElem(int height, int width) {\r\n            return maze[height][width];\r\n        }\r\n\r\n        void setElem(int height, int width, Elem elem) {\r\n            maze[height][width] = elem;\r\n        }\r\n\r\n        int getWidth() {\r\n            return maze[0].length;\r\n        }\r\n\r\n        int getHeight() {\r\n            return maze.length;\r\n        }\r\n\r\n        Maze copy() {\r\n            return new Maze(this);\r\n        }\r\n\r\n        int count(Elem toCount) {\r\n            int sum = 0;\r\n            for (Elem[] row : maze) {\r\n                for (Elem e : row) {\r\n                    if (e == toCount) {\r\n                        sum++;\r\n                    }\r\n                }\r\n            }\r\n            return sum;\r\n        }\r\n\r\n        int countAround(int h, int w, Elem elem) {\r\n            int sum = 0;\r\n\r\n            if (h + 1 < getHeight() &&\r\n                getElem(h + 1, w) == elem) {\r\n                sum++;\r\n            }\r\n\r\n            if (h - 1 >= 0 &&\r\n                getElem(h - 1, w) == elem) {\r\n                sum++;\r\n            }\r\n\r\n            if (w + 1 < getWidth() &&\r\n                getElem(h, w + 1) == elem) {\r\n                sum++;\r\n            }\r\n\r\n            if (w - 1 >= 0 &&\r\n                getElem(h, w - 1) == elem) {\r\n                sum++;\r\n            }\r\n\r\n            return sum;\r\n        }\r\n\r\n        int countEntrances() {\r\n            int entranceCount = 0;\r\n            for (Elem[] line : new Elem[][] {\r\n                getCol(0),\r\n                getCol(getWidth() - 1),\r\n                getRow(0),\r\n                getRow(getHeight() - 1)\r\n            }) {\r\n\r\n                for (Elem e : line) {\r\n                    if (e != Elem.WALL) {\r\n                        entranceCount++;\r\n                    }\r\n                }\r\n            }\r\n            return entranceCount;\r\n        }\r\n\r\n        private void propagate(Elem from, Elem to) {\r\n            boolean didPropagate = true;\r\n            while (didPropagate) {\r\n                didPropagate = false;\r\n                for (int h = 0; h < getHeight(); h++) {\r\n                    for (int w = 0; w < getWidth(); w++) {\r\n                        if (getElem(h, w) == from) {\r\n                            if (countAround(h, w, to) > 0) {\r\n                                didPropagate = true;\r\n                                setElem(h, w, to);\r\n                            }\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n        int checkAccessibility() {\r\n            int entranceHeight = 0;\r\n            int entranceWidth = 0;\r\n\r\n            findPoints: {\r\n                for (int currWidth : new int[] {0, getWidth() - 1}) {\r\n                    for (int currHeight = 0; currHeight < getHeight(); currHeight++) {\r\n                        if (getElem(currHeight, currWidth) != Elem.WALL) {\r\n                            entranceHeight = currHeight;\r\n                            entranceWidth = currWidth;\r\n                            break findPoints;\r\n                        }\r\n                    }\r\n                }\r\n\r\n                for (int currHeight : new int[] {0, getHeight() - 1}) {\r\n                    for (int currWidth = 0; currWidth < getWidth(); currWidth++) {\r\n                        if (getElem(currHeight, currWidth) != Elem.WALL) {\r\n                            entranceHeight = currHeight;\r\n                            entranceWidth = currWidth;\r\n                            break findPoints;\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n\r\n            Maze copy = copy();\r\n            copy.setElem(entranceHeight, entranceWidth, Elem.PATH);\r\n            copy.propagate(Elem.EMPTY, Elem.PATH);\r\n\r\n            return copy.count(Elem.EMPTY);\r\n        }\r\n\r\n        int checkPath() throws Exception {\r\n            int entranceHeight = 0;\r\n            int entranceWidth = 0;\r\n\r\n            for (int currWidth : new int[] {0, getWidth() - 1}) {\r\n                for (int currHeight = 0; currHeight < getHeight(); currHeight++) {\r\n                    if (getElem(currHeight, currWidth) == Elem.EMPTY) {\r\n                        throw new Exception(\"If the maze is solved all \" +\r\n                            \"the entrances should be marked with '//' characters\");\r\n                    }\r\n                    if (getElem(currHeight, currWidth) == Elem.PATH) {\r\n                        entranceHeight = currHeight;\r\n                        entranceWidth = currWidth;\r\n                    }\r\n                }\r\n            }\r\n\r\n            for (int currHeight : new int[] {0, getHeight() - 1}) {\r\n                for (int currWidth = 0; currWidth < getWidth(); currWidth++) {\r\n                    if (getElem(currHeight, currWidth) == Elem.EMPTY) {\r\n                        throw new Exception(\"If the maze is solved all \" +\r\n                            \"the entrances should be marked with '//' characters\");\r\n                    }\r\n                    if (getElem(currHeight, currWidth) == Elem.PATH) {\r\n                        entranceHeight = currHeight;\r\n                        entranceWidth = currWidth;\r\n                    }\r\n                }\r\n            }\r\n\r\n            for (int h = 0; h < getHeight(); h++) {\r\n                for (int w = 0; w < getWidth(); w++) {\r\n                    if (getElem(h, w) == Elem.PATH) {\r\n                        if (countAround(h, w, Elem.PATH) >= 3) {\r\n                            throw new Exception(\"The escape path shouldn't branch off, \" +\r\n                                \"it should go in one direction.\");\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n\r\n            Maze copy = copy();\r\n            copy.setElem(entranceHeight, entranceWidth, Elem.DUMMY);\r\n            copy.propagate(Elem.PATH, Elem.DUMMY);\r\n\r\n            return copy.count(Elem.PATH);\r\n        }\r\n\r\n        boolean equals(Maze other) {\r\n            if (getWidth() != other.getWidth() || getHeight() != other.getHeight()) {\r\n                return false;\r\n            }\r\n            for (int h = 0; h < getHeight(); h++) {\r\n                for (int w = 0; w < getWidth(); w++) {\r\n                    if (getElem(h, w) == Elem.WALL && other.getElem(h, w) != Elem.WALL ||\r\n                        getElem(h, w) != Elem.WALL && other.getElem(h, w) == Elem.WALL) {\r\n                        return false;\r\n                    }\r\n                }\r\n            }\r\n            return true;\r\n        }\r\n\r\n        static List<Maze> parse(String text) throws Exception {\r\n\r\n            List<Maze> mazes = new ArrayList<>();\r\n\r\n            List<String> lines = text\r\n                .lines()\r\n                .collect(Collectors.toList());\r\n\r\n            lines.add(\"\");\r\n\r\n            List<String> mazeLines = new ArrayList<>();\r\n\r\n            boolean isStarted = false;\r\n            for (String line : lines) {\r\n                if (line.contains(\"\\u2588\")) {\r\n                    isStarted = true;\r\n                    mazeLines.add(line);\r\n                } else if (isStarted) {\r\n                    isStarted = false;\r\n                    Maze maze = new Maze(mazeLines);\r\n                    mazes.add(maze);\r\n                    mazeLines.clear();\r\n                }\r\n            }\r\n\r\n            return mazes;\r\n        }\r\n\r\n    }\r\n\r\n    class Clue {\r\n        int height;\r\n        int width;\r\n        Clue(int h, int w) {\r\n            height = h;\r\n            width = w;\r\n        }\r\n    }\r\n\r\n    public class MazeRunnerTest extends StageTest<Clue> {\r\n\r\n        public MazeRunnerTest() {\r\n            super(Main.class);\r\n        }\r\n\r\n        List<Maze> previousMazes = new ArrayList<>();\r\n\r\n        @Override\r\n        public List<TestCase<Clue>> generate() {\r\n            return List.of(\r\n                new TestCase<Clue>()\r\n                    .setInput(\"7 9\")\r\n                    .setAttach(new Clue(7, 9)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"15 35\")\r\n                    .setAttach(new Clue(15, 35)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"15 35\")\r\n                    .setAttach(new Clue(15, 35)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"15 35\")\r\n                    .setAttach(new Clue(15, 35)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"15 35\")\r\n                    .setAttach(new Clue(15, 35)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"15 35\")\r\n                    .setAttach(new Clue(15, 35)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"15 35\")\r\n                    .setAttach(new Clue(15, 35)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"15 35\")\r\n                    .setAttach(new Clue(15, 35)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"15 35\")\r\n                    .setAttach(new Clue(15, 35)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"34 23\")\r\n                    .setAttach(new Clue(34, 23)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"34 23\")\r\n                    .setAttach(new Clue(34, 23)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"34 23\")\r\n                    .setAttach(new Clue(34, 23)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"34 23\")\r\n                    .setAttach(new Clue(34, 23)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"34 23\")\r\n                    .setAttach(new Clue(34, 23)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"34 23\")\r\n                    .setAttach(new Clue(34, 23)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"34 23\")\r\n                    .setAttach(new Clue(34, 23)),\r\n\r\n                new TestCase<Clue>()\r\n                    .setInput(\"34 23\")\r\n                    .setAttach(new Clue(34, 23))\r\n\r\n            );\r\n        }\r\n\r\n        @Override\r\n        public CheckResult check(String reply, Clue clue) {\r\n\r\n            List<Maze> mazes;\r\n            try {\r\n                mazes = Maze.parse(reply);\r\n            } catch (Exception e) {\r\n                return CheckResult.wrong(\r\n                    e.getMessage()\r\n                );\r\n            }\r\n\r\n            if (mazes.size() == 0) {\r\n                return CheckResult.wrong(\r\n                    \"No mazes found in the output. Check if you are using \" +\r\n                        \"\\\\u2588 character to print the maze.\"\r\n                );\r\n            }\r\n\r\n            if (mazes.size() > 1) {\r\n                return CheckResult.wrong(\r\n                    \"Found \" + mazes.size() + \" mazes in the output. \" +\r\n                        \"Should be only one maze.\"\r\n                );\r\n            }\r\n\r\n            Maze maze = mazes.get(0);\r\n\r\n            for (Maze prev : previousMazes) {\r\n                if (prev.equals(maze)) {\r\n                    return CheckResult.wrong(\r\n                        \"This is the same maze that was in the previous tests. \" +\r\n                        \"You should create an algorithm that generates different mazes.\"\r\n                    );\r\n                }\r\n            }\r\n            previousMazes.add(maze);\r\n\r\n            int entrances = maze.countEntrances();\r\n            if (entrances != 2) {\r\n                return new CheckResult(false,\r\n                    \"There are \" + entrances + \" entrances to the maze, \" +\r\n                        \"should be only two.\");\r\n            }\r\n\r\n            int emptyLeft = maze.checkAccessibility();\r\n            if (emptyLeft > 0) {\r\n                return new CheckResult(false,\r\n                    \"There are \" + emptyLeft + \" empty \" +\r\n                        \"cells that are inaccessible from the entrance of the maze \" +\r\n                        \"(or there is no way from the entrance to the exit).\"\r\n                );\r\n            }\r\n\r\n            if (maze.getHeight() != clue.height) {\r\n                return new CheckResult(false,\r\n                    \"Number of rows in the maze is incorrect. \" +\r\n                        \"It's \" + maze.getHeight() + \", but should be \" + clue.height);\r\n            }\r\n\r\n            if (maze.getWidth() != clue.width) {\r\n                return new CheckResult(false,\r\n                    \"Number of columns in the maze is incorrect. \" +\r\n                        \"It's \" + maze.getWidth() + \", but should be \" + clue.width);\r\n            }\r\n\r\n            return CheckResult.correct();\r\n        }\r\n    }\r\n  learner_created: false\r\n- name: src/maze/Direction.java\r\n  visible: true\r\n  learner_created: true\r\nfeedback_link: https://hyperskill.org/projects/47/stages/252/implement\r\nstatus: Solved\r\nfeedback:\r\n  message: Congratulations! Continue on <a href=\"https://hyperskill.org/projects/47/stages/252/implement\">JetBrains\r\n    Academy</a>\r\n  time: Tue, 25 Aug 2020 20:30:06 UTC\r\nrecord: -1\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- Maze Runner/Maze generator/task-info.yaml	(revision 5920bccd6c9b43db4e6e8ac2f957cdb15124e0ba)
+-+++ Maze Runner/Maze generator/task-info.yaml	(date 1598453726033)
+-@@ -545,9 +545,5 @@
+-   visible: true
+-   learner_created: true
+- feedback_link: https://hyperskill.org/projects/47/stages/252/implement
+--status: Solved
+--feedback:
+--  message: Congratulations! Continue on <a href="https://hyperskill.org/projects/47/stages/252/implement">JetBrains
+--    Academy</a>
+--  time: Tue, 25 Aug 2020 20:30:06 UTC
+-+status: Unchecked
+- record: -1
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_8_25_2020_1_01_PM__Default_Changelist_1.xml .idea/shelf/Uncommitted_changes_before_Update_at_8_25_2020_1_01_PM__Default_Changelist_1.xml
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_8_25_2020_1_01_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_8_25_2020_1_01_PM__Default_Changelist_.xml
+-diff --git .idea/shelf/Uncommitted_changes_before_Checkout_at_24_08_2020_11_10__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Checkout_at_24_08_2020_11_10__Default_Changelist_.xml
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58__Default_Changelist_1.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58__Default_Changelist_1.xml	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58__Default_Changelist_1.xml	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
+@@ -1,54 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1" date="1598453909995" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 26.08.2020 17:58 [Default Changelist]" />
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/buildOutputCleanup/outputFiles.bin" />
+-    <option name="AFTER_PATH" value=".gradle/buildOutputCleanup/outputFiles.bin" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/outputFiles.bin" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/5.3.1/fileHashes/fileHashes.bin" />
+-    <option name="AFTER_PATH" value=".gradle/5.3.1/fileHashes/fileHashes.bin" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/fileHashes.bin" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value="Maze Runner/task/out/production/classes/maze/Main.class" />
+-    <option name="AFTER_PATH" value="Maze Runner/task/out/production/classes/maze/Main.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/Main.class" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/5.3.1/fileHashes/fileHashes.lock" />
+-    <option name="AFTER_PATH" value=".gradle/5.3.1/fileHashes/fileHashes.lock" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/fileHashes.lock" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".idea/frameworkLessonHistory/storage.storageData" />
+-    <option name="AFTER_PATH" value=".idea/frameworkLessonHistory/storage.storageData" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/storage.storageData" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".idea/frameworkLessonHistory/storage.storageRecordIndex" />
+-    <option name="AFTER_PATH" value=".idea/frameworkLessonHistory/storage.storageRecordIndex" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/storage.storageRecordIndex" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+-    <option name="AFTER_PATH" value=".gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/buildOutputCleanup.lock" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/5.3.1/executionHistory/executionHistory.lock" />
+-    <option name="AFTER_PATH" value=".gradle/5.3.1/executionHistory/executionHistory.lock" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/executionHistory.lock" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".gradle/5.3.1/executionHistory/executionHistory.bin" />
+-    <option name="AFTER_PATH" value=".gradle/5.3.1/executionHistory/executionHistory.bin" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/executionHistory.bin" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value="Maze Runner/task/out/production/classes/maze/Main$1.class" />
+-    <option name="AFTER_PATH" value="Maze Runner/task/out/production/classes/maze/Main$1.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]1/Main$1.class" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58__Default_Changelist_.xml	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58__Default_Changelist_.xml	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]" date="1598453886741" recycled="false" toDelete="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_26_08_2020_17_58_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 26.08.2020 17:58 [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54__Default_Changelist_.xml	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54__Default_Changelist_.xml	(revision 211661d55e0bad459f28cd71cd26e8d7137ad821)
+@@ -1,14 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_26_08_2020_17_54_[Default_Changelist]" date="1598453718960" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 26.08.2020 17:54 [Default Changelist]" />
+-  <binary>
+-    <option name="BEFORE_PATH" value=".idea/frameworkLessonHistory/storage.storageRecordIndex" />
+-    <option name="AFTER_PATH" value=".idea/frameworkLessonHistory/storage.storageRecordIndex" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54_[Default_Changelist]/storage.storageRecordIndex" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value=".idea/frameworkLessonHistory/storage.storageData" />
+-    <option name="AFTER_PATH" value=".idea/frameworkLessonHistory/storage.storageData" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_08_2020_17_54_[Default_Changelist]/storage.storageData" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
