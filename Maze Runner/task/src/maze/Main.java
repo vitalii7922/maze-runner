@@ -1,24 +1,124 @@
 package maze;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
     private static int[][] maze;
+    private static final Scanner scanner = new Scanner(System.in);
     private static int i = 1;
     private static int j = 1;
     private static final Random random = new Random();
     private static final Deque<List<Integer>> ends = new LinkedList<>();
+    private static boolean isLoaded = false;
+    private static boolean isGenerated = false;
+    private static boolean isWorking = true;
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int m = scanner.nextInt();
-        maze = new int[n][m];
-        buildPath(m, n);
-        buildWayIn();
-        buildWayOut(n, m);
-        printMaze();
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        while (isWorking) {
+            if (isGenerated || isLoaded) {
+                printLongMenu();
+            } else {
+                printShortMenu();
+            }
+        }
     }
+
+
+    private static void printLongMenu() throws IOException, ClassNotFoundException {
+        System.out.println("=== Menu ===");
+        System.out.println("1. Generate a new maze.");
+        System.out.println("2. Load a maze.");
+        System.out.println("3. Save the maze.");
+        System.out.println("4. Display the maze.");
+        System.out.println("5. Exit.");
+        pickOptionLongMenu(scanner.nextInt());
+    }
+
+    private static void printShortMenu() throws IOException, ClassNotFoundException {
+        System.out.println("=== Menu ===");
+        System.out.println("1. Generate a new maze.");
+        System.out.println("2. Load a maze.");
+        System.out.println("0. Exit.");
+        pickOptionShortMenu(scanner.nextInt());
+    }
+
+    private static void saveMaze() throws IOException {
+        SerializationUtils.serialize(maze, scanner.next());
+    }
+
+    private static void loadMaze() throws IOException, ClassNotFoundException {
+        maze = null;
+        maze = (int[][]) SerializationUtils.deserialize(scanner.next());
+        if (maze != null) {
+            isLoaded = true;
+        }
+    }
+
+    private static void pickOptionLongMenu(int option) throws IOException, ClassNotFoundException {
+        switch (option) {
+            case 1:
+                generateNewMaze();
+                break;
+            case 2:
+                loadMaze();
+                break;
+            case 3:
+                saveMaze();
+                break;
+            case 4:
+                printMaze();
+                break;
+            case 5:
+                System.out.println("Bye!");
+                isWorking = false;
+                break;
+            default:
+                System.out.println("Incorrect option. Please try again");
+                break;
+        }
+    }
+
+    private static void pickOptionShortMenu(int option) throws IOException, ClassNotFoundException {
+        switch (option) {
+            case 0:
+                System.out.println("Bye!");
+                isWorking = false;
+                break;
+            case 1:
+                generateNewMaze();
+                break;
+            case 2:
+                loadMaze();
+                break;
+            case 3:
+                saveMaze();
+                break;
+            case 4:
+                printMaze();
+                break;
+            case 5:
+                System.out.println("Bye!");
+                isWorking = false;
+                break;
+            default:
+                System.out.println("Incorrect option. Please try again");
+                break;
+        }
+    }
+
+
+    private static void generateNewMaze() {
+        System.out.println("Enter the size of a new maze");
+        int n = scanner.nextInt();
+        maze = new int[n][n];
+        buildPath(n, n);
+        buildWayIn();
+        buildWayOut(n, n);
+        printMaze();
+        isGenerated = true;
+    }
+
 
     private static void buildPath(int width, int height) {
         List<Direction> directions;
@@ -166,6 +266,5 @@ public class Main {
             }
             System.out.println();
         }
-        System.out.println(ends.size());
     }
 }

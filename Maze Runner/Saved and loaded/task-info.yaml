@@ -483,5 +483,26 @@ files:
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/projects/47/stages/253/implement
-status: Unchecked
+status: Failed
+feedback:
+  message: "Exception in test #2\n\nProbably your program run out of input (Scanner\
+    \ tried to read more than expected).\n\njava.util.NoSuchElementException\r\n\t\
+    at java.base/java.util.Scanner.throwFor(Scanner.java:937)\r\n\tat java.base/java.util.Scanner.next(Scanner.java:1478)\r\
+    \n\tat maze.Main.printLongMenu(Main.java:35)\r\n\tat maze.Main.main(Main.java:20)\n\
+    \nPlease find below the output of your program during this failed test.\nNote\
+    \ that the &#39;&gt;&#39; character indicates the beginning of the input line.\n\
+    \n---\n\n=== Menu ===\n1. Generate a new maze.\n2. Load a maze.\n0. Exit.\n&gt;\
+    \ 1\nEnter the size of a new maze\n&gt; 17\n██████████████████████████████████\
+    \n    ██                  ██      ██\n██  ██  ██████████████  ██  ██  ██\n██ \
+    \ ██      ██          ██  ██  ██\n██  ██  ██  ██████████████  ██  ██\n██  ██ \
+    \ ██                  ██  ██\n██  ██████████  ██████████████  ██\n██         \
+    \ ██          ██      ██\n██████████  ██████████  ██  ██  ██\n██      ██     \
+    \ ██      ██  ██  ██\n██  ██████████  ██  ██████  ██  ██\n██          ██  ██ \
+    \ ██  ██  ██  ██\n██████████  ██  ██  ██  ██  ██  ██\n██          ██  ██     \
+    \ ██  ██  ██\n██  ██████████  ██████████  ██  ██\n██                         \
+    \ ██  ██\n██████████████████████████████  ██\n=== Menu ===\n1. Generate a new\
+    \ maze.\n2. Load a maze.\n3. Save the maze.\n4. Display the maze.\n5. Exit.\n\
+    &gt; 0\nIncorrect option. Please try again\n=== Menu ===\n1. Generate a new maze.\n\
+    2. Load a maze.\n3. Save the maze.\n4. Display the maze.\n5. Exit."
+  time: Thu, 27 Aug 2020 20:14:03 UTC
 record: 3
