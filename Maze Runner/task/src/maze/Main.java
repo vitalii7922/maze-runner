@@ -57,6 +57,10 @@ public class Main {
 
     private static void pickOptionLongMenu(int option) throws IOException, ClassNotFoundException {
         switch (option) {
+            case 0:
+                System.out.println("Bye!");
+                isWorking = false;
+                break;
             case 1:
                 generateNewMaze();
                 break;
