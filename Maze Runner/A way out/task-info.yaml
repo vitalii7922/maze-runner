@@ -522,6 +522,25 @@ files:
         }
     }
   learner_created: false
+- name: src/maze/SerializationUtils.java
+  visible: true
+  learner_created: true
+- name: src/maze/Point.java
+  visible: true
+  learner_created: true
+- name: src/maze/Direction.java
+  visible: true
+  learner_created: true
+- name: src/maze/Maze.java
+  visible: true
+  learner_created: true
+- name: test_maze.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/47/stages/254/implement
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations! Continue on <a href="https://hyperskill.org/projects/47/stages/254/implement">JetBrains
+    Academy</a>
+  time: Fri, 28 Aug 2020 19:38:56 UTC
 record: -1

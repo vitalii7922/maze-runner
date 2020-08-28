@@ -1,0 +1,37 @@
+
+K
+java:S1066å"/Merge this if statement with the enclosing one.(ıÌªñüÿÿÿÿ
+K
+java:S1066±"/Merge this if statement with the enclosing one.(ÿİƒµüÿÿÿÿ
+`	java:S112."FDefine and throw a dedicated exception instead of using a generic one.(™‡¿šøÿÿÿÿ
+[	java:S1125"FDefine and throw a dedicated exception instead of using a generic one.(Î¢›‘
+`	java:S112E"FDefine and throw a dedicated exception instead of using a generic one.(¸àŞ°şÿÿÿÿ
+[	java:S112U"FDefine and throw a dedicated exception instead of using a generic one.(¬ÄÙ
+`	java:S112j"FDefine and throw a dedicated exception instead of using a generic one.(›çƒËıÿÿÿÿ
+[	java:S112{"FDefine and throw a dedicated exception instead of using a generic one.(Ä²£
+`	java:S112)"FDefine and throw a dedicated exception instead of using a generic one.(€’Õ©şÿÿÿÿ
+a	java:S112—"FDefine and throw a dedicated exception instead of using a generic one.(á¿³ıÿÿÿÿ
+a	java:S112¤"FDefine and throw a dedicated exception instead of using a generic one.(á¿³ıÿÿÿÿ
+\	java:S112²"FDefine and throw a dedicated exception instead of using a generic one.(ÖøÌ
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Š©Ÿ
+a	java:S112Ï"FDefine and throw a dedicated exception instead of using a generic one.(‘¢âµüÿÿÿÿ
+Z
+java:S1155š">Use isEmpty() to check whether the collection is empty or not.(ƒ•ºÛşÿÿÿÿ
+Z
+java:S1155¡">Use isEmpty() to check whether the collection is empty or not.(„áÔ”ÿÿÿÿÿ
+.
+java:S1700"Rename field "maze"(Ö¤ö¸ùÿÿÿÿ
+0
+java:S1220""Move this file to a named package.
+t
+java:S3012$"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(òñÕüÿÿÿÿ
+m
+java:S3776)"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(€’Õ©şÿÿÿÿ
+p
+java:S3012…"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(åôô‹
+R
+java:S1119ó";Refactor the code to remove this label and the need for it.(Ùˆ¸
+i
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(Š©Ÿ
+q
+java:S1201À"UEither override Object.equals(Object), or rename the method to prevent any confusion.(Éèƒùÿÿÿÿ

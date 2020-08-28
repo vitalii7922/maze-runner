@@ -1,0 +1,12 @@
+Index: Maze Runner/task/test/.idea/sonarlint/issuestore/index.pb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Maze Runner/task/test/.idea/sonarlint/issuestore/index.pb	(date 1598613657014)
++++ Maze Runner/task/test/.idea/sonarlint/issuestore/index.pb	(date 1598613657014)
+@@ -0,0 +1,3 @@
++
++C
++MazeRunnerTest.java,d\5\d538631ec14daa5caccb43aecd39843272c433dc
+\ No newline at end of file
